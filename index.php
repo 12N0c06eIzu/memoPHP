@@ -12,7 +12,7 @@
 </head>
 <body>
 <header>
-<h1 class="font-weight-normal">トップページです。</h1>    
+<h1 class="font-weight-normal">トップページです。</h1>
 </header>
 
 <main>
