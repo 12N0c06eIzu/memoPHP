@@ -17,38 +17,64 @@
 
   <main>
     <h2>Practice</h2>
+    <?php
+    /* ここに、PHPのプログラムを記述します */
+    try{
+      $db = new PDO('mysql:dbname=mydb;
+      host=localhost;
+      charset=utf8',//utf-8ではなくutf8
+      'root',
+      '');
+    }catch(PDOException $e){
+      echo 'DB接続エラー:'. $e -> getMessage();
+    }
+    // echo "\n";
+
+    //my_itemsを取得してきている
+    // $records = $db->query('SELECT * FROM my_items');
+    //
+
+    if(isset($_REQUEST['page'] )&& is_numeric($_REQUEST['page'])){
+      $page = $_REQUEST['page'];
+    }else {
+      $page = 1;
+      // code...
+    }
+
+
+    $start = 5 * ($page - 1);
+
+    $memos = $db -> prepare('SELECT * FROM memos ORDER BY id LIMIT ?, 5');
+    $memos->bindParam(1, $start, PDO::PARAM_INT);
+    $memos->execute();
+    ?>
+
+    <article class="">
+      <?php while ($memo = $memos -> fetch()): ?>
+        <p>
+          <a href="memo.php?id=<?php print($memo['id']); ?>">
+            <?php print(mb_substr($memo['memo'], 0, 50)); ?>
+            <?php print((mb_strlen($memo['memo']) > 50 ? '...' : '')); ?>
+          </a>
+        </p>
+        <time><?php print($memo['created_at']); ?></time>
+        <hr>
+      <?php endwhile; ?>
+
+
+      <?php if($page >= 2): ?>
+      <a href="index.php?page=<?php print($page - 1); ?>"><?php print($page - 1); ?>ページ目へ</a>
+    <?php endif; ?>
+      |
       <?php
-      /* ここに、PHPのプログラムを記述します */
-      try{
-        $db = new PDO('mysql:dbname=mydb;
-        host=localhost;
-        charset=utf8',//utf-8ではなくutf8
-        'root',
-        '');
-      }catch(PDOException $e){
-        echo 'DB接続エラー:'. $e -> getMessage();
-      }
-      // echo "\n";
-
-      //my_itemsを取得してきている
-      $records = $db->query('SELECT * FROM my_items');
-      //
-
-      $memos = $db -> query('SELECT * FROM memos ORDER BY id DESC');
-      ?>
-
-      <article class="">
-        <?php while ($memo = $memos -> fetch()): ?>
-          <p>
-            <a href="memo.php?id=<?php print($memo['id']); ?>">
-              <?php print(mb_substr($memo['memo'], 0, 50)); ?>
-              <?php print((mb_strlen($memo['memo']) > 50 ? '...' : '')); ?>
-            </a>
-          </p>
-          <time><?php print($memo['created_at']); ?></time>
-          <hr>
-        <?php endwhile; ?>
-        </article>
-    </main>
-  </body>
-  </html>
+      $counts = $db ->query('SELECT COUNT(*) as cnt FROM memos');
+      $count = $counts -> fetch();
+      $max_page = floor($count['cnt'] / 5) + 1;
+      if($page < $max_page):
+        ?>
+      <a href="index.php?page=<?php print($page + 1); ?>"><?php print($page + 1); ?>ページ目へ</a>
+    <?php endif; ?>
+    </article>
+  </main>
+</body>
+</html>
