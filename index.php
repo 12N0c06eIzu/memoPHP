@@ -17,7 +17,6 @@
 
   <main>
     <h2>Practice</h2>
-    <pre>
       <?php
       /* ここに、PHPのプログラムを記述します */
       try{
@@ -29,22 +28,27 @@
       }catch(PDOException $e){
         echo 'DB接続エラー:'. $e -> getMessage();
       }
-      echo "\n";
+      // echo "\n";
 
       //my_itemsを取得してきている
       $records = $db->query('SELECT * FROM my_items');
       //
-      while($record = $records->fetch()){
-        print($record['item_name']. ":￥".$record['price']."\n");
-      }
 
-      /*
-      $count = $db->exec('INSERT INTO my_items SET maker_id=1, item_name="もも",price=210,keyword="缶詰,ピンク,甘い",sales=0, created="2018-01-23",modified="2018-01-23"');
-      echo $count.'件のデータを挿入しました。';
-      */
-
+      $memos = $db -> query('SELECT * FROM memos ORDER BY id DESC');
       ?>
-    </pre>
-  </main>
-</body>
-</html>
+
+      <article class="">
+        <?php while ($memo = $memos -> fetch()): ?>
+          <p>
+            <a href="memo.php?id=<?php print($memo['id']); ?>">
+              <?php print(mb_substr($memo['memo'], 0, 50)); ?>
+              <?php print((mb_strlen($memo['memo']) > 50 ? '...' : '')); ?>
+            </a>
+          </p>
+          <time><?php print($memo['created_at']); ?></time>
+          <hr>
+        <?php endwhile; ?>
+        </article>
+    </main>
+  </body>
+  </html>
