@@ -18,22 +18,13 @@
 
   <main>
     <h2>Practice</h2>
-
     <?php
-    if(isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])){
-      $id = $_REQUEST['id'];
-      $memos = $db -> prepare('SELECT * FORM memos WHERE id=?');
-      $memos -> execute(array($id));
-      $memo = $memos -> fetch();
-    }
+    $statement = $db -> prepare('UPDATE memos SET memo=? WHERE id=?');
+    $statement -> execute(array($_POST['memo'], $_POST['id']));
     ?>
-
-    <form action="update_do.php" method="post">
-      <input type="hidden" name="id" value="<?php print($id); ?>">
-      <textarea name="memo" rows="10" cols="50"><?php print($memo['memo']); ?></textarea><br>
-      <button type="submit">登録する</button>
-    </form>
-
+    <p>メモの内容を変更しました。</p>
+    <p><a href="index.php">戻る</a>
+    </p>
   </main>
 </body>
 </html>
