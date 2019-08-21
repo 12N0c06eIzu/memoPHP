@@ -1,3 +1,4 @@
+<?php require('dbconnect.php'); ?>
 <!doctype html>
 <html lang="ja">
 <head>

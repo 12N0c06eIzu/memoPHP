@@ -12,15 +12,16 @@
 </head>
 <body>
 <header>
-<h1 class="font-weight-normal">よくわかるPHPの教科書</h1>
+<h1 class="font-weight-normal">よくわかるPHPの教科書</h1>    
 </header>
 
 <main>
 <h2>Practice</h2>
-<form action="input_do.php" method="post">
-    <textarea name="memo" rows="10" cols="50" placeholder="自由にメモを残してください"></textarea><br>
-      <button type="submit">登録する</button>
-</form>
+<pre>
+<?php
+/* ここに、PHPのプログラムを記述します */
+?>
+</pre>
 </main>
-</body>
+</body>    
 </html>
